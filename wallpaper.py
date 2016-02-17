@@ -21,7 +21,7 @@ class RedditWallpaper:
         self.wallpaper = wallpaper
 
     def set_wallpaper_database(self, wallpaper):
-        connn = sqlite3.connect("Wallpaper.db")
+        conn = sqlite3.connect("Wallpaper.db")
         c = conn.cursor()
 
         c.execute("INSERT INTO wallpapers VALUES (?)", (wallpaper))
