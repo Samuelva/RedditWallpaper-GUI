@@ -1,10 +1,8 @@
 import sys
 import RedditWallpaper
 import wallpaper
-from PyQt4 import QtGui
-from PyQt4.QtCore import pyqtSlot
-import PyQt4.QtCore
-
+from PyQt4 import *
+from PyQt4.QtCore import *
 
 class GUI(QtGui.QWidget):
 
@@ -16,7 +14,10 @@ class GUI(QtGui.QWidget):
 	def initUI(self):
 
 		qle = QtGui.QLineEdit("Wallpapers", self)
-		qle.move(100, 40)
+		qle.move(100, 10)
+
+		lbl1 = QtGui.QLabel("Subreddit:", self)
+		lbl1.move(10, 14)
 
 		combo = QtGui.QComboBox(self)
 		combo.addItem("Day")
@@ -25,37 +26,55 @@ class GUI(QtGui.QWidget):
 		combo.addItem("Year")
 		combo.addItem("All Time")
 
-		combo.move(100, 80)
+		combo.move(100, 50)
+
+		lbl2 = QtGui.QLabel("Submission:", self)
+		lbl2.move(10, 54)
+
+		combo2 = QtGui.QComboBox(self)
+		combo2.addItem("1920x1080")
+		combo2.addItem("1366x768")
+		combo2.addItem("1280x1024")
+		combo2.addItem("800x600")
+
+		combo2.move(100, 90)
+
+		lbl3 = QtGui.QLabel("Resolution:", self)
+		lbl3.move(10, 94)
 
 		btn = QtGui.QPushButton('Preview', self)
 		btn.setToolTip('Change background')
 		btn.resize(btn.sizeHint())
+		btn.clicked.connect(self.handleButton)
 
-		btn.move(100, 120)
+		btn.move(100, 130)
 
-		btn2 = QtGui.QPushButton("Add to database", self)
-		btn2.setToolTip("Add this background to the database")
-		btn2.resize(btn2.sizeHint())
 
-		btn2.move(100, 160)
+		# btn2 = QtGui.QPushButton("Add to database", self)
+		# btn2.setToolTip("Add this background to the database")
+		# btn2.resize(btn2.sizeHint())
+
+		# btn2.move(100, 160)
 
 		cb = QtGui.QCheckBox("Database",self)
-		cb.move(200, 80)
+		cb.move(200, 54)
 		cb.toggle()
 
-		hbox = QtGui.QHBoxLayout(self)
-		pixmap = QtGui.QPixmap("24861344486_b2a2f6805e_k.jpg")
-		pixmap2 = pixmap.scaled(192, 108, PyQt4.QtCore.Qt.KeepAspectRatio)
-		lbl2 = QtGui.QLabel(self)
-		lbl2.setPixmap(pixmap2)
+		# hbox = QtGui.QHBoxLayout(self)
+		# pixmap = QtGui.QPixmap("24861344486_b2a2f6805e_k.jpg")
+		# pixmap2 = pixmap.scaled(192, 108, PyQt4.QtCore.Qt.KeepAspectRatio)
+		# lbl2 = QtGui.QLabel(self)
+		# lbl2.setPixmap(pixmap2)
 
-		hbox.addWidget(lbl2)
-		self.setLayout(hbox)
+		# hbox.addWidget(lbl2)
+		# self.setLayout(hbox)
 
-		self.setFixedSize(320, 240)
+		self.setFixedSize(320, 170)
 		self.setWindowTitle("Reddit Wallpaper")
 		self.show()
 
+	def handleButton(self):
+		self.setFixedSize(500,240)
 
 def main():
 
