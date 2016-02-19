@@ -3,6 +3,7 @@ import RedditWallpaper
 import wallpaper
 from PyQt4 import *
 from PyQt4.QtCore import *
+import PyQt4
 
 class GUI(QtGui.QWidget):
 
@@ -76,21 +77,22 @@ class GUI(QtGui.QWidget):
 
 
 
-		# hbox = QtGui.QHBoxLayout(self)
-		# pixmap = QtGui.QPixmap("24861344486_b2a2f6805e_k.jpg")
-		# pixmap2 = pixmap.scaled(192, 108, PyQt4.QtCore.Qt.KeepAspectRatio)
-		# lbl2 = QtGui.QLabel(self)
-		# lbl2.setPixmap(pixmap2)
 
-		# hbox.addWidget(lbl2)
-		# self.setLayout(hbox)
 
 		self.setFixedSize(320, 190)
 		self.setWindowTitle("Reddit Wallpaper")
 		self.show()
 
 	def handleButton(self):
-		self.setFixedSize(500, 190)
+		self.setFixedSize(510, 190)
+		pixmap = QtGui.QPixmap("24861344486_b2a2f6805e_k.jpg")
+		pixmap2 = pixmap.scaled(200, 110, PyQt4.QtCore.Qt.KeepAspectRatio)
+		lbl2 = QtGui.QLabel(self)
+		lbl2.setPixmap(pixmap2)
+		lbl2.move(320, 20)
+		lbl2.show()
+
+
 
 def main():
 
