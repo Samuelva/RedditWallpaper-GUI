@@ -14,84 +14,78 @@ class GUI(QtGui.QWidget):
 
 	def initUI(self):
 
-		qle = QtGui.QLineEdit("Wallpapers", self)
-		qle.move(120, 20)
+		self.qle = QtGui.QLineEdit("Wallpapers", self)
+		self.qle.move(120, 20)
 
 		lbl1 = QtGui.QLabel("Subreddit:", self)
 		lbl1.move(20, 24)
 
-		combo = QtGui.QComboBox(self)
-		combo.addItem("Day")
-		combo.addItem("Week")
-		combo.addItem("Month")
-		combo.addItem("Year")
-		combo.addItem("All Time")
-		combo.addItem("Database")
-
-		combo.move(120, 50)
+		self.combo = QtGui.QComboBox(self)
+		self.combo.addItem("Day")
+		self.combo.addItem("Week")
+		self.combo.addItem("Month")
+		self.combo.addItem("Year")
+		self.combo.addItem("All Time")
+		self.combo.addItem("Database")
+		self.combo.currentIndexChanged.connect(self.submissionChange)
+		self.combo.move(120, 50)
 
 		lbl2 = QtGui.QLabel("Submission:", self)
 		lbl2.move(20, 54)
 
-		# cb = QtGui.QCheckBox("Database",self)
-		# cb.move(200, 53)
-		# cb.toggle()
-
-		combo2 = QtGui.QComboBox(self)
-		combo2.addItem("1920x1080")
-		combo2.addItem("1366x768")
-		combo2.addItem("1280x1024")
-		combo2.addItem("800x600")
-
-		combo2.move(120, 80)
+		self.combo2 = QtGui.QComboBox(self)
+		self.combo2.addItem("1920x1080")
+		self.combo2.addItem("1366x768")
+		self.combo2.addItem("1280x1024")
+		self.combo2.addItem("800x600")
+		self.combo2.move(120, 80)
 
 		lbl3 = QtGui.QLabel("Resolution:", self)
 		lbl3.move(20, 84)
 
-		dbChbx = QtGui.QCheckBox("", self)
-		dbChbx.move(120, 112)
-		dbChbx.toggle()
+		self.dbChbx = QtGui.QCheckBox("", self)
+		self.dbChbx.move(120, 112)
+		self.dbChbx.toggle()
 
 		lbl4 = QtGui.QLabel("Save to db:", self)
 		lbl4.move(20, 114)
 
-		pBtn = QtGui.QPushButton('Preview', self)
-		pBtn.setToolTip("Show a preview of the background")
-		pBtn.resize(pBtn.sizeHint())
-		pBtn.clicked.connect(self.handleButton)
+		self.pBtn = QtGui.QPushButton('Preview', self)
+		self.pBtn.setToolTip("Show a preview of the background")
+		self.pBtn.resize(self.pBtn.sizeHint())
+		self.pBtn.clicked.connect(self.handleButton)
+		self.pBtn.move(120, 140)
 
-		pBtn.move(120, 140)
-
-		cbBtn = QtGui.QPushButton("Change", self)
-		cbBtn.setToolTip("Change the background")
-		cbBtn.resize(cbBtn.sizeHint())
-		
-		cbBtn.move(210, 140)
-
-
-		# btn2 = QtGui.QPushButton("Add to database", self)
-		# btn2.setToolTip("Add this background to the database")
-		# btn2.resize(btn2.sizeHint())
-
-		# btn2.move(100, 160)
-
-
-
-
+		self.cbBtn = QtGui.QPushButton("Change", self)
+		self.cbBtn.setToolTip("Change the background")
+		self.cbBtn.resize(self.cbBtn.sizeHint())		
+		self.cbBtn.move(210, 140)
 
 		self.setFixedSize(320, 190)
 		self.setWindowTitle("Reddit Wallpaper")
 		self.show()
 
+	def submissionChange(self, i):
+		if self.combo.currentText() == "Database":
+			self.qle.setEnabled(False)
+			self.combo2.setEnabled(False)
+			self.dbChbx.setEnabled(False)
+		else:
+			self.qle.setEnabled(True)
+			self.combo2.setEnabled(True)
+			self.dbChbx.setEnabled(True)
+
+
 	def handleButton(self):
 		self.setFixedSize(510, 190)
+
 		pixmap = QtGui.QPixmap("24861344486_b2a2f6805e_k.jpg")
 		pixmap2 = pixmap.scaled(200, 110, PyQt4.QtCore.Qt.KeepAspectRatio)
-		lbl2 = QtGui.QLabel(self)
-		lbl2.setPixmap(pixmap2)
-		lbl2.move(320, 20)
-		lbl2.show()
 
+		lblPixmap = QtGui.QLabel(self)
+		lblPixmap.setPixmap(pixmap2)
+		lblPixmap.move(320, 20)
+		lblPixmap.show()
 
 
 def main():
