@@ -50,10 +50,11 @@ class GUI(QtGui.QWidget):
 		lbl4 = QtGui.QLabel("Save to db:", self)
 		lbl4.move(20, 114)
 
+		self.previewOn = False
 		self.pBtn = QtGui.QPushButton('Preview', self)
 		self.pBtn.setToolTip("Show a preview of the background")
 		self.pBtn.resize(self.pBtn.sizeHint())
-		self.pBtn.clicked.connect(self.handleButton)
+		self.pBtn.clicked.connect(self.preview)
 		self.pBtn.move(120, 140)
 
 		self.cbBtn = QtGui.QPushButton("Change", self)
@@ -76,16 +77,22 @@ class GUI(QtGui.QWidget):
 			self.dbChbx.setEnabled(True)
 
 
-	def handleButton(self):
-		self.setFixedSize(510, 190)
+	def preview(self):
+		if not self.previewOn:
+			self.setFixedSize(510, 190)
 
-		pixmap = QtGui.QPixmap("24861344486_b2a2f6805e_k.jpg")
-		pixmap2 = pixmap.scaled(200, 110, PyQt4.QtCore.Qt.KeepAspectRatio)
+			pixmap = QtGui.QPixmap("24861344486_b2a2f6805e_k.jpg")
+			pixmap2 = pixmap.scaled(200, 110, PyQt4.QtCore.Qt.KeepAspectRatio)
 
-		lblPixmap = QtGui.QLabel(self)
-		lblPixmap.setPixmap(pixmap2)
-		lblPixmap.move(320, 20)
-		lblPixmap.show()
+			self.lblPixmap = QtGui.QLabel(self)
+			self.lblPixmap.setPixmap(pixmap2)
+			self.lblPixmap.move(320, 20)
+			self.lblPixmap.show()
+
+			self.previewOn = True
+		elif self.previewOn:
+			self.setFixedSize(320, 190)
+			self.previewOn = False
 
 
 def main():
