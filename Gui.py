@@ -66,6 +66,19 @@ class GUI(QtGui.QWidget):
 		self.setWindowTitle("Reddit Wallpaper")
 		self.show()
 
+		self.lblPixmap = QtGui.QLabel(self)
+
+		self.nextButton = QtGui.QPushButton(">", self)
+		self.nextButton.setToolTip("Get the next background")
+		self.nextButton.resize(self.nextButton.sizeHint())
+		self.nextButton.move(360, 140)
+
+		# self.prevButton = QtGui.QPushButton("<", self)
+		# self.prevButton.setToolTip("Get the previous background")
+		# self.prevButton.resize(self.prevButton.sizeHint())
+		# self.prevButton.move(320, 140)
+
+
 	def submissionChange(self, i):
 		if self.combo.currentText() == "Database":
 			self.qle.setEnabled(False)
@@ -84,13 +97,19 @@ class GUI(QtGui.QWidget):
 			pixmap = QtGui.QPixmap("24861344486_b2a2f6805e_k.jpg")
 			pixmap2 = pixmap.scaled(200, 110, PyQt4.QtCore.Qt.KeepAspectRatio)
 
-			self.lblPixmap = QtGui.QLabel(self)
 			self.lblPixmap.setPixmap(pixmap2)
 			self.lblPixmap.move(320, 20)
 			self.lblPixmap.show()
 
+			self.nextButton.show()
+			# self.prevButton.show()
+
 			self.previewOn = True
 		elif self.previewOn:
+			self.lblPixmap.hide()
+			self.nextButton.hide()
+			# self.prevButton.hide()
+
 			self.setFixedSize(320, 190)
 			self.previewOn = False
 
