@@ -11,11 +11,11 @@ class RedditWallpaper:
 
     def __init__(self, subreddit):
         user_agent = "python:RedditWallpapers:v3.0"
-        r = praw.Reddit(user_agent=user_agent)
-        self.subreddit = r.get_subreddit(subreddit)
+        self.r = praw.Reddit(user_agent=user_agent)
+        self.subreddit = self.r.get_subreddit(subreddit)
 
     def set_subreddit(self, subreddit):
-        self.subreddit = r.get_subreddit(subreddit)
+        self.subreddit = self.r.get_subreddit(subreddit)
 
     def set_wallpaper(self, wallpaper):
         self.wallpaper = wallpaper
@@ -29,23 +29,26 @@ class RedditWallpaper:
         conn.commit()
         conn.close()
 
+    def set_resolution(self, resolution):
+        self.resolution = resolution
+
     def get_subreddit(self):
         return self.subreddit
 
     def get_submissions_day(self):
-        return self.subreddit.get_top_from_day()
+        return self.subreddit.get_top_from_day(limit=10)
 
-    def get_submissions_week(self):
-        return self.subreddit.get_top_from_day()
+    def set_submissions_week(self):
+        self.submissions = self.subreddit.get_top_from_week()
 
     def get_submissions_month(self):
-        return self.subreddit.get_top_from_day()
+        return self.subreddit.get_top_from_day(limit=10)
 
-    def get_submissions_year(self):
-        return self.subreddit.get_top_from_day()
+    def set_submissions_year(self):
+        self.submissions = self.subreddit.get_top_from_year()
 
-    def get_submissions_all_time(self):
-        return self.subreddit.get_top_from_day()
+    def set_submissions_all_time(self):
+        self.submissions = self.subreddit.get_top_from_all()
 
     def get_wallpaper_database(self):
         conn = sqlite3.connect("Wallpaper.db")
@@ -56,6 +59,11 @@ class RedditWallpaper:
 
         conn.close()
 
+    def get_submissions(self):
+        submissionsList = []
+        for submission in self.submissions:
+            submissionsList.append(submission)
+        return submissionsList
 
 
 def main():
