@@ -38,25 +38,31 @@ class RedditWallpaper:
     def get_submissions_day(self):
         return self.subreddit.get_top_from_day(limit=10)
 
-    def set_submissions_week(self):
-        self.submissions = self.subreddit.get_top_from_week()
+    def get_submissions_week(self):
+        return self.subreddit.get_top_from_week()
 
     def get_submissions_month(self):
-        return self.subreddit.get_top_from_day(limit=10)
+        return self.get_image_urls(self.subreddit.get_top_from_day(limit=10))
 
-    def set_submissions_year(self):
-        self.submissions = self.subreddit.get_top_from_year()
+    def get_submissions_year(self):
+        return self.subreddit.get_top_from_year()
 
-    def set_submissions_all_time(self):
-        self.submissions = self.subreddit.get_top_from_all()
-
+    def get_submissions_all_time(self):
+        return self.subreddit.get_top_from_all()
+        
+    def set_image(self, directory, imageID):
+        self.image = directory+imageID
+        
+    def get_image(self):
+        return self.image
 
     def get_image_urls(self, submissions):
         image_urls = []
         for submission in submissions:
+            submission.url = submission.url
+            submission.url = submission.url
             image_urls.append(submission.url)
         return image_urls
-
 
     def get_wallpaper_database(self):
         conn = sqlite3.connect("Wallpaper.db")
