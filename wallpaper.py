@@ -50,6 +50,14 @@ class RedditWallpaper:
     def set_submissions_all_time(self):
         self.submissions = self.subreddit.get_top_from_all()
 
+
+    def get_image_urls(self, submissions):
+        image_urls = []
+        for submission in submissions:
+            image_urls.append(submission.url)
+        return image_urls
+
+
     def get_wallpaper_database(self):
         conn = sqlite3.connect("Wallpaper.db")
         c = conn.cursor()

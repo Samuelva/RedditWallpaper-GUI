@@ -10,11 +10,13 @@ class GUI(QtGui.QWidget):
 
 	def __init__(self):
 		super(GUI, self).__init__()
-
 		self.initUI()
 
 
 	def initUI(self):
+		self.directory = "/home/samuel/Documents/RedditWallpaper-GUI/Wallpapers/"
+
+
 		self.test1 = wallpaper.RedditWallpaper("wallpapers")
 		self.qle = QtGui.QLineEdit("Wallpapers", self)
 		self.qle.move(120, 20)
@@ -72,13 +74,13 @@ class GUI(QtGui.QWidget):
 
 		self.nextButton = QtGui.QPushButton(">", self)
 		self.nextButton.setToolTip("Get the next background")
-		self.nextButton.resize(self.nextButton.sizeHint())
-		self.nextButton.move(360, 140)
+		self.nextButton.setFixedWidth(30)
+		self.nextButton.move(400, 140)
 
-		# self.prevButton = QtGui.QPushButton("<", self)
-		# self.prevButton.setToolTip("Get the previous background")
-		# self.prevButton.resize(self.prevButton.sizeHint())
-		# self.prevButton.move(320, 140)
+		self.prevButton = QtGui.QPushButton("<", self)
+		self.prevButton.setToolTip("Get the previous background")
+		self.prevButton.setFixedWidth(30)
+		self.prevButton.move(370, 140)
 
 
 	def submissionChange(self, i):
@@ -95,62 +97,48 @@ class GUI(QtGui.QWidget):
 	def preview(self):
 		if not self.previewOn:
 			self.setFixedSize(510, 190)
-
 			self.test1.set_subreddit(self.qle.text())
-
-			if self.combo.currentText() == "Day":
-				xyg = self.test1.get_submissions_day()
-			elif self.combo.currentText() == "Month":
-				print(self.test1.set_submissions_month())
-			elif self.combo.currentText() == "Year":
-				print(self.test1.set_submissions_year())
-			elif self.combo.currentText() == "All Time":
-				print(self.test1.set_submissions_all_time())
-			elif self.combo.currentText() == "Database":
-				print(self.test1.get_wallpaper_database())
-
-			self.image_urls = []
-			for submission in self.test1.get_submissions_month():
-				self.image_urls.append(submission.url)
-
+			self.image_urls = self.test1.get_image_urls(self.test1.get_submissions_month())
 			self.image_index = 0
-			self.directory = "/home/samuel/Documents/RedditWallpaper-GUI/Wallpapers/"
 			self.image_name = self.image_urls[self.image_index].split("/")[-1]
-			print(self.image_urls[self.image_index])
-			urllib.request.urlretrieve(self.image_urls[self.image_index]+".png", self.directory+self.image_name)
-
-			pixmap = QtGui.QPixmap(self.directory+self.image_name)
-			pixmap2 = pixmap.scaled(200, 110, PyQt4.QtCore.Qt.KeepAspectRatio)
-
-			self.lblPixmap.setPixmap(pixmap2)
-			self.lblPixmap.move(320, 20)
-			self.lblPixmap.show()
-
+			self.idknu()
 			self.nextButton.show()
-			# self.prevButton.show()
-
+			self.prevButton.show()
 			self.previewOn = True
+
+			self.nextButton.clicked.connect(self.nextImage)
+			self.prevButton.clicked.connect(self.prevImage)
 
 		elif self.previewOn:
 			self.lblPixmap.hide()
 			self.nextButton.hide()
-			# self.prevButton.hide()
-
+			self.prevButton.hide()
 			self.setFixedSize(320, 190)
 			self.previewOn = False
 
-		self.nextButton.clicked.connect(self.nextImage)
 
-
-	def nextImage(self):
-		self.image_index += 1
+	def idknu(self):
 		urllib.request.urlretrieve(self.image_urls[self.image_index]+".png", self.directory+self.image_name)
+		
 		pixmap = QtGui.QPixmap(self.directory+self.image_name)
 		pixmap2 = pixmap.scaled(200, 110, PyQt4.QtCore.Qt.KeepAspectRatio)
 		self.lblPixmap.setPixmap(pixmap2)
-		self.lblPixmap.setPixmap(pixmap2)
 		self.lblPixmap.move(320, 20)
+		self.lblPixmap.show()
+
+	def nextImage(self):
+		self.image_index += 1
+		self.idknu()
+
+	def prevImage(self):
+		self.image_index -= 1
+		self.idknu()
+
 	
+	# def get
+
+	# def checkUrl(self):
+
 
 def main():
 	app = QtGui.QApplication(sys.argv)
