@@ -59,9 +59,11 @@ class RedditWallpaper:
     def get_image_urls(self, submissions):
         image_urls = []
         for submission in submissions:
-            submission.url = submission.url
-            submission.url = submission.url
-            image_urls.append(submission.url)
+            submission = self.valid_image(submission.url)
+            if submission == False:
+                continue
+            else:
+                image_urls.append(submission)
         return image_urls
 
     def get_wallpaper_database(self):
@@ -72,14 +74,14 @@ class RedditWallpaper:
             return row[0]
 
         conn.close()
-
-    def get_submissions(self):
-        submissionsList = []
-        for submission in self.submissions:
-            submissionsList.append(submission)
-        return submissionsList
-
-
+    
+    def valid_image(self, submission):
+        if submission.split(".")[-1] not in ("jpg", "png"):
+            return(False)
+        else:
+            return(submission)
+          
+        
 def main():
     test1 = RedditWallpaper("wallpapers")
     print(test1.get_wallpaper_database())
