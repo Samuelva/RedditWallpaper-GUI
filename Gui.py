@@ -1,5 +1,5 @@
+import os
 import sys
-#import RedditWallpaper
 import wallpaper
 from PyQt4 import *
 from PyQt4.QtCore import *
@@ -64,7 +64,8 @@ class GUI(QtGui.QWidget):
 
         self.cbBtn = QtGui.QPushButton("Change", self)
         self.cbBtn.setToolTip("Change the background")
-        self.cbBtn.resize(self.cbBtn.sizeHint())		
+        self.cbBtn.resize(self.cbBtn.sizeHint())	
+        self.cbBtn.clicked.connect(self.change_wallpaper)	
         self.cbBtn.move(210, 140)
 
         self.setFixedSize(320, 190)
@@ -136,6 +137,9 @@ class GUI(QtGui.QWidget):
         self.image_index -= 1
         self.idknu()
 
+    def change_wallpaper(self):
+        os.system("gsettings set org.gnome.desktop.background picture-uri file://%(path)s" % {'path':self.test1.get_image()})
+        os.system("gsettings set org.gnome.desktop.background picture-options wallpaper")
     
     # def get
 
