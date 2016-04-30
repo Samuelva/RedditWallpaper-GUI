@@ -16,6 +16,7 @@ class GUI(QtGui.QWidget):
     def initUI(self):
         self.directory = "/home/samuel/Documents/RedditWallpaper-GUI/Wallpapers/"
         self.image_index = 0
+        self.downloaded_images = []
 
         self.test1 = wallpaper.RedditWallpaper("wallpapers")
         self.qle = QtGui.QLineEdit("Wallpapers", self)
@@ -113,12 +114,13 @@ class GUI(QtGui.QWidget):
 
 
     def idknu(self):
-        print(self.test1.get_submissions_month()[self.image_index])
+        # print(self.image_index)
+        # print(self.test1.get_submissions_month()[self.image_index])
         self.test1.set_image(self.directory, 
                              self.test1.get_submissions_month()[self.image_index].split("/")[-1])
-        print(self.test1.get_image())
-        urllib.request.urlretrieve(self.test1.get_submissions_month()[self.image_index],
-                                   self.test1.get_image())
+        if self.test1.get_image() not in self.downloaded_images:
+            urllib.request.urlretrieve(self.test1.get_submissions_month()[self.image_index],
+                                    self.test1.get_image())
         pixmap = QtGui.QPixmap(self.test1.get_image())
         pixmap2 = pixmap.scaled(200, 110, PyQt4.QtCore.Qt.KeepAspectRatio)
         self.lblPixmap.setPixmap(pixmap2)
@@ -126,6 +128,7 @@ class GUI(QtGui.QWidget):
         self.lblPixmap.show()
 
     def nextImage(self):
+        self.downloaded_images.append(self.test1.get_image())
         self.image_index += 1
         self.idknu()
 
