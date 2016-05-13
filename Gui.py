@@ -96,15 +96,17 @@ class GUI(QtGui.QWidget):
             self.dbChbx.setEnabled(True)
             
     def disableButtons(self):
-        if self.image_index+1 == len(self.test1.get_submissions_month()):
+        if self.image_index+1 == len(self.test1.get_submissions()):
             self.nextButton.setEnabled(False)
-        elif self.image_index < len(self.test1.get_submissions_month()) and self.image_index != 0:
+        elif self.image_index < len(self.test1.get_submissions()) and self.image_index != 0:
             self.nextButton.setEnabled(True)
             self.prevButton.setEnabled(True)
         elif self.image_index == 0:
             self.prevButton.setEnabled(False)
             
     def preview(self):
+        self.image_index = 0
+        self.setSubmissions()
         self.disableButtons()
         if not self.previewOn:
             self.previewOn = True
@@ -122,15 +124,26 @@ class GUI(QtGui.QWidget):
             self.prevButton.hide()
             self.setFixedSize(320, 190)
             self.previewOn = False
-
-
+    
+    def setSubmissions(self):
+        if self.combo.currentText() == "Day":
+            self.test1.set_submissions_day()
+        elif self.combo.currentText() == "Week":
+            self.test1.set_submissions_week()
+        elif self.combo.currentText() == "Month":
+            self.test1.set_submissions_month()
+        elif self.combo.currentText() == "Year":
+            self.test1.set_submissions_year()
+        elif self.combo.currentText() == "All Time":
+            self.test1.set_submissions_all_time()
+            
     def idknu(self):
         # print(self.image_index)
         # print(self.test1.get_submissions_month()[self.image_index])
         self.test1.set_image(self.directory, 
-                             self.test1.get_submissions_month()[self.image_index].split("/")[-1])
+                             self.test1.get_submissions()[self.image_index].split("/")[-1])
         if self.test1.get_image() not in self.downloaded_images:
-            urllib.request.urlretrieve(self.test1.get_submissions_month()[self.image_index],
+            urllib.request.urlretrieve(self.test1.get_submissions()[self.image_index],
                                     self.test1.get_image())
         pixmap = QtGui.QPixmap(self.test1.get_image())
         pixmap2 = pixmap.scaled(200, 110, PyQt4.QtCore.Qt.KeepAspectRatio)

@@ -38,24 +38,27 @@ class RedditWallpaper:
     def get_subreddit(self):
         return self.subreddit
 
-    def get_submissions_day(self):
-        return self.subreddit.get_top_from_day(limit=10)
+    def set_submissions_day(self):
+        self.submissions = self.get_image_urls(self.subreddit.get_top_from_day(limit=10))
 
-    def get_submissions_week(self):
-        return self.subreddit.get_top_from_week()
+    def set_submissions_week(self):
+        self.submissions = self.get_image_urls(self.subreddit.get_top_from_week(limit=10))
+        
+    def set_submissions_month(self):
+        self.submissions = self.get_image_urls(self.subreddit.get_top_from_month(limit=10))
 
-    def get_submissions_month(self):
-        return self.get_image_urls(self.subreddit.get_top_from_day(limit=10))
+    def set_submissions_year(self):
+        self.submissions = self.get_image_urls(self.subreddit.get_top_from_year(limit=10))
 
-    def get_submissions_year(self):
-        return self.subreddit.get_top_from_year()
-
-    def get_submissions_all_time(self):
-        return self.subreddit.get_top_from_all()
+    def set_submissions_all_time(self):
+        self.submissions = self.get_image_urls(self.subreddit.get_top_from_all(limit=10))
         
     def set_image(self, directory, imageID):
         self.image = directory+imageID
-        
+    
+    def get_submissions(self):
+        return self.submissions
+    
     def get_image(self):
         return self.image
 
