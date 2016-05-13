@@ -18,8 +18,8 @@ class GUI(QtGui.QWidget):
         self.image_index = 0
         self.downloaded_images = []
 
-        self.test1 = wallpaper.RedditWallpaper("wallpapers")
-        self.qle = QtGui.QLineEdit("Wallpapers", self)
+        self.test1 = wallpaper.RedditWallpaper("wallpaper")
+        self.qle = QtGui.QLineEdit("Wallpaper", self)
         self.qle.move(120, 20)
 
         lbl1 = QtGui.QLabel("Subreddit:", self)
@@ -95,7 +95,17 @@ class GUI(QtGui.QWidget):
             self.combo2.setEnabled(True)
             self.dbChbx.setEnabled(True)
             
+    def disableButtons(self):
+        if self.image_index+1 == len(self.test1.get_submissions_month()):
+            self.nextButton.setEnabled(False)
+        elif self.image_index < len(self.test1.get_submissions_month()) and self.image_index != 0:
+            self.nextButton.setEnabled(True)
+            self.prevButton.setEnabled(True)
+        elif self.image_index == 0:
+            self.prevButton.setEnabled(False)
+            
     def preview(self):
+        self.disableButtons()
         if not self.previewOn:
             self.previewOn = True
             self.setFixedSize(510, 190)
@@ -129,12 +139,14 @@ class GUI(QtGui.QWidget):
         self.lblPixmap.show()
 
     def nextImage(self):
-        self.downloaded_images.append(self.test1.get_image())
         self.image_index += 1
+        self.disableButtons()
+        self.downloaded_images.append(self.test1.get_image())
         self.idknu()
 
     def prevImage(self):
         self.image_index -= 1
+        self.disableButtons()
         self.idknu()
 
     def change_wallpaper(self):

@@ -31,6 +31,9 @@ class RedditWallpaper:
 
     def set_resolution(self, resolution):
         self.resolution = resolution
+        
+    def get_resolution(self):
+        return self.resolution
 
     def get_subreddit(self):
         return self.subreddit
