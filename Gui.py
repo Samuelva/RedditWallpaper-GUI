@@ -1,15 +1,14 @@
 import os
 import sys
 import wallpaper
-from PyQt4 import *
-from PyQt4.QtCore import *
-import PyQt4
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QPixmap
 import urllib.request
 
-class GUI(QtGui.QWidget):
+class GUI(QWidget):
 
     def __init__(self):
-        super(GUI, self).__init__()
+        super().__init__()
         self.initUI()
 
 
@@ -19,13 +18,13 @@ class GUI(QtGui.QWidget):
         self.downloaded_images = []
 
         self.test1 = wallpaper.RedditWallpaper("wallpaper")
-        self.qle = QtGui.QLineEdit("Wallpaper", self)
+        self.qle = QLineEdit("Wallpaper", self)
         self.qle.move(120, 20)
 
-        lbl1 = QtGui.QLabel("Subreddit:", self)
+        lbl1 = QLabel("Subreddit:", self)
         lbl1.move(20, 24)
 
-        self.combo = QtGui.QComboBox(self)
+        self.combo = QComboBox(self)
         self.combo.addItem("Day")
         self.combo.addItem("Week")
         self.combo.addItem("Month")
@@ -35,34 +34,34 @@ class GUI(QtGui.QWidget):
         self.combo.currentIndexChanged.connect(self.submissionChange)
         self.combo.move(120, 50)
 
-        lbl2 = QtGui.QLabel("Submission:", self)
+        lbl2 = QLabel("Submission:", self)
         lbl2.move(20, 54)
 
-        self.combo2 = QtGui.QComboBox(self)
+        self.combo2 = QComboBox(self)
         self.combo2.addItem("1920x1080")
         self.combo2.addItem("1366x768")
         self.combo2.addItem("1280x1024")
         self.combo2.addItem("800x600")
         self.combo2.move(120, 80)
 
-        lbl3 = QtGui.QLabel("Resolution:", self)
+        lbl3 = QLabel("Resolution:", self)
         lbl3.move(20, 84)
 
-        self.dbChbx = QtGui.QCheckBox("", self)
+        self.dbChbx = QCheckBox("", self)
         self.dbChbx.move(120, 112)
         self.dbChbx.toggle()
 
-        lbl4 = QtGui.QLabel("Save to db:", self)
+        lbl4 = QLabel("Save to db:", self)
         lbl4.move(20, 114)
 
         self.previewOn = False
-        self.pBtn = QtGui.QPushButton('Preview', self)
+        self.pBtn = QPushButton('Preview', self)
         self.pBtn.setToolTip("Show a preview of the background")
         self.pBtn.resize(self.pBtn.sizeHint())
         self.pBtn.clicked.connect(self.preview)
         self.pBtn.move(120, 140)
 
-        self.cbBtn = QtGui.QPushButton("Change", self)
+        self.cbBtn = QPushButton("Change", self)
         self.cbBtn.setToolTip("Change the background")
         self.cbBtn.resize(self.cbBtn.sizeHint())	
         self.cbBtn.clicked.connect(self.change_wallpaper)	
@@ -72,14 +71,14 @@ class GUI(QtGui.QWidget):
         self.setWindowTitle("Reddit Wallpaper")
         self.show()
 
-        self.lblPixmap = QtGui.QLabel(self)
+        self.lblPixmap = QLabel(self)
 
-        self.nextButton = QtGui.QPushButton(">", self)
+        self.nextButton = QPushButton(">", self)
         self.nextButton.setToolTip("Get the next background")
         self.nextButton.setFixedWidth(30)
         self.nextButton.move(400, 140)
 
-        self.prevButton = QtGui.QPushButton("<", self)
+        self.prevButton = QPushButton("<", self)
         self.prevButton.setToolTip("Get the previous background")
         self.prevButton.setFixedWidth(30)
         self.prevButton.move(370, 140)
@@ -145,8 +144,8 @@ class GUI(QtGui.QWidget):
         if self.test1.get_image() not in self.downloaded_images:
             urllib.request.urlretrieve(self.test1.get_submissions()[self.image_index],
                                     self.test1.get_image())
-        pixmap = QtGui.QPixmap(self.test1.get_image())
-        pixmap2 = pixmap.scaled(200, 110, PyQt4.QtCore.Qt.KeepAspectRatio)
+        pixmap = QPixmap(self.test1.get_image())
+        pixmap2 = pixmap.scaled(200, 110)
         self.lblPixmap.setPixmap(pixmap2)
         self.lblPixmap.move(320, 20)
         self.lblPixmap.show()
@@ -172,7 +171,7 @@ class GUI(QtGui.QWidget):
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     ex = GUI()
     sys.exit(app.exec_())
 
@@ -180,9 +179,9 @@ if __name__ == "__main__":
     main()
 # def main():
 
-# 	app = QtGui.QApplication(sys.argv)
+# 	app = QApplication(sys.argv)
 
-# 	w = QtGui.QWidget()
+# 	w = QWidget()
 # 	w.setFixedSize(320, 240)
 # 	w.setWindowTitle('Reddit Wallpaper')
 
@@ -190,14 +189,14 @@ if __name__ == "__main__":
 # 	def on_press():
 # 		RedditWallpaper.main("-db")
 
-# 	btn = QtGui.QPushButton('Change background', w)
+# 	btn = QPushButton('Change background', w)
 # 	btn.setToolTip('Change background')
 # 	btn.clicked.connect(on_press)
 # 	btn.resize(btn.sizeHint())
 # 	btn.move(100, 80)
 
-# 	w.lbl = QtGui.QLabel("Day", w)
-# 	combo = QtGui.QComboBox(w)
+# 	w.lbl = QLabel("Day", w)
+# 	combo = QComboBox(w)
 # 	combo.addItem("Day")
 # 	combo.addItem("Week")
 # 	combo.addItem("Month")

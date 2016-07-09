@@ -1,7 +1,6 @@
 import os
 import praw
 from PIL import Image
-from PyQt4 import QtGui
 import random
 import sqlite3
 import sys
