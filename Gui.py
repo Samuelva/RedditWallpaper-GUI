@@ -1,221 +1,135 @@
-import os
+#!/usr/bin/python
+
 import sys
-import wallpaper
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QPixmap
-import urllib.request
+from PyQt5 import QtCore, QtGui, QtWidgets
+from Wallpaper import Wallpaper
+#from PyQt5.QtWidgets import QMainWindow, QWidget
 
-class GUI(QWidget):
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self, Wallpaper):
+        super(MainWindow, self).__init__()
+        self.Wallpaper = Wallpaper
+        parameters = Parameters(self, self.Wallpaper)
+        preview = Preview(self, self.Wallpaper)
+        navigation = Navigation(self, self.Wallpaper)
 
-    def __init__(self):
-        super().__init__()
-        self.initUI()
+        self.mainLayout = QtWidgets.QVBoxLayout()
+        self.mainLayout.addWidget(parameters)
+        self.mainLayout.addWidget(preview)
+        self.mainLayout.addWidget(navigation)
 
+        self.centralWidget = QtWidgets.QWidget()
+        self.centralWidget.setLayout(self.mainLayout)
 
-    def initUI(self):
-        self.directory = "/home/samuel/Documents/RedditWallpaper-GUI/Wallpapers/"
-        self.image_index = 0
-        self.downloaded_images = []
+        self.setCentralWidget(self.centralWidget)
 
-        self.test1 = wallpaper.RedditWallpaper("wallpaper")
-        self.qle = QLineEdit("Wallpaper", self)
-        self.qle.move(120, 20)
-
-        lbl1 = QLabel("Subreddit:", self)
-        lbl1.move(20, 24)
-
-        self.combo = QComboBox(self)
-        self.combo.addItem("Day")
-        self.combo.addItem("Week")
-        self.combo.addItem("Month")
-        self.combo.addItem("Year")
-        self.combo.addItem("All Time")
-        self.combo.addItem("Database")
-        self.combo.currentIndexChanged.connect(self.submissionChange)
-        self.combo.move(120, 50)
-
-        lbl2 = QLabel("Submission:", self)
-        lbl2.move(20, 54)
-
-        self.combo2 = QComboBox(self)
-        self.combo2.addItem("1920x1080")
-        self.combo2.addItem("1366x768")
-        self.combo2.addItem("1280x1024")
-        self.combo2.addItem("800x600")
-        self.combo2.move(120, 80)
-
-        lbl3 = QLabel("Resolution:", self)
-        lbl3.move(20, 84)
-
-        self.dbChbx = QCheckBox("", self)
-        self.dbChbx.move(120, 112)
-        self.dbChbx.toggle()
-
-        lbl4 = QLabel("Save to db:", self)
-        lbl4.move(20, 114)
-
-        self.previewOn = False
-        self.pBtn = QPushButton('Preview', self)
-        self.pBtn.setToolTip("Show a preview of the background")
-        self.pBtn.resize(self.pBtn.sizeHint())
-        self.pBtn.clicked.connect(self.preview)
-        self.pBtn.move(120, 140)
-
-        self.cbBtn = QPushButton("Change", self)
-        self.cbBtn.setToolTip("Change the background")
-        self.cbBtn.resize(self.cbBtn.sizeHint())	
-        self.cbBtn.clicked.connect(self.change_wallpaper)	
-        self.cbBtn.move(210, 140)
-
-        self.setFixedSize(320, 190)
         self.setWindowTitle("Reddit Wallpaper")
         self.show()
 
-        self.lblPixmap = QLabel(self)
 
-        self.nextButton = QPushButton(">", self)
-        self.nextButton.setToolTip("Get the next background")
-        self.nextButton.setFixedWidth(30)
-        self.nextButton.move(400, 140)
+class Parameters(QtWidgets.QFrame):
+    def __init__(self, parent, Wallpaper):
+        super(Parameters, self).__init__(parent=parent)
+        self.Wallpaper = Wallpaper
+        #self.setFrameShape(QtWidgets.QFrame.Panel)
 
-        self.prevButton = QPushButton("<", self)
-        self.prevButton.setToolTip("Get the previous background")
-        self.prevButton.setFixedWidth(30)
-        self.prevButton.move(370, 140)
+        # pBox = QtWidgets.QHBoxLayout()
+
+        # pLabels = QtWidgets.QVBoxLayout()
+
+        # pLabels.addWidget(QtWidgets.QLabel("Subreddit", self))
+        # pLabels.addWidget(QtWidgets.QLabel("Submission", self))
+        # pLabels.addWidget(QtWidgets.QLabel("Resolution", self))
+
+        self.subInput = QtWidgets.QLineEdit("Wallpaper", self)
+        self.subInput.textChanged.connect(self.inputChange)
+        self.subInput.setToolTip("Set the subreddit")
+
+        self.comboSub = QtWidgets.QComboBox(self)
+        self.comboSub.addItem("Day")
+        self.comboSub.addItem("Week")
+        self.comboSub.addItem("Month")
+        self.comboSub.addItem("Year")
+        self.comboSub.addItem("All")
+        self.comboSub.setToolTip("Set the type of submission")
+        self.comboSub.currentIndexChanged.connect(self.submissionChange)
+
+        self.comboRes = QtWidgets.QComboBox(self)
+        self.comboRes.addItem("1920x1080")
+        self.comboRes.addItem("1366x768")
+        self.comboRes.addItem("1280x1024")
+        self.comboRes.addItem("800x600")
+        self.comboRes.setToolTip("Set the resolution")
+        self.comboRes.currentIndexChanged.connect(self.resolutionChange)
+
+        self.previewBtn = QtWidgets.QPushButton("GO", self)
+        self.previewBtn.setFixedWidth(35)
+        self.previewBtn.setToolTip("Retrieve and preview the wallpapers") 
+        
+        pSelection = QtWidgets.QHBoxLayout()
+        pSelection.addWidget(self.subInput)
+        pSelection.addWidget(self.comboSub)
+        pSelection.addWidget(self.comboRes)
+        pSelection.addWidget(self.previewBtn)
+        pSelection.setContentsMargins(2, 0, 2, 0)
+
+        # pBox.addLayout(pLabels)
+        #pBox.addLayout(pSelection)
+        #self.setLayout(pBox)
+        self.setFixedHeight(40)
+        self.setLayout(pSelection)
+
+    def inputChange(self, subreddit):
+        self.Wallpaper.subreddit = subreddit
 
 
-    def submissionChange(self, i):
-        if self.combo.currentText() == "Database":
-            self.qle.setEnabled(False)
-            self.combo2.setEnabled(False)
-            self.dbChbx.setEnabled(False)
-        else:
-            self.qle.setEnabled(True)
-            self.combo2.setEnabled(True)
-            self.dbChbx.setEnabled(True)
-            
-    def disableButtons(self):
-        if self.image_index+1 == len(self.test1.get_submissions()):
-            self.nextButton.setEnabled(False)
-        elif self.image_index < len(self.test1.get_submissions()) and self.image_index != 0:
-            self.nextButton.setEnabled(True)
-            self.prevButton.setEnabled(True)
-        elif self.image_index == 0:
-            self.prevButton.setEnabled(False)
-            
-    def preview(self):
-        self.image_index = 0
-        self.setSubmissions()
-        self.disableButtons()
-        if not self.previewOn:
-            self.previewOn = True
-            self.setFixedSize(510, 190)
-            self.test1.set_subreddit(self.qle.text())
-            self.idknu()
-            self.nextButton.show()
-            self.prevButton.show()
-            self.nextButton.clicked.connect(self.nextImage)
-            self.prevButton.clicked.connect(self.prevImage)
+    def submissionChange(self):
+        self.Wallpaper.submission = self.comboSub.currentText()
 
-        elif self.previewOn:
-            self.lblPixmap.hide()
-            self.nextButton.hide()
-            self.prevButton.hide()
-            self.setFixedSize(320, 190)
-            self.previewOn = False
-    
-    def setSubmissions(self):
-        if self.combo.currentText() == "Day":
-            self.test1.set_submissions_day()
-        elif self.combo.currentText() == "Week":
-            self.test1.set_submissions_week()
-        elif self.combo.currentText() == "Month":
-            self.test1.set_submissions_month()
-        elif self.combo.currentText() == "Year":
-            self.test1.set_submissions_year()
-        elif self.combo.currentText() == "All Time":
-            self.test1.set_submissions_all_time()
-            
-    def idknu(self):
-        # print(self.image_index)
-        # print(self.test1.get_submissions_month()[self.image_index])
-        self.test1.set_image(self.directory, 
-                             self.test1.get_submissions()[self.image_index].split("/")[-1])
-        if self.test1.get_image() not in self.downloaded_images:
-            urllib.request.urlretrieve(self.test1.get_submissions()[self.image_index],
-                                    self.test1.get_image())
-        pixmap = QPixmap(self.test1.get_image())
-        pixmap2 = pixmap.scaled(200, 110)
-        self.lblPixmap.setPixmap(pixmap2)
-        self.lblPixmap.move(320, 20)
-        self.lblPixmap.show()
 
-    def nextImage(self):
-        self.image_index += 1
-        self.disableButtons()
-        self.downloaded_images.append(self.test1.get_image())
-        self.idknu()
+    def resolutionChange(self):
+        self.Wallpaper.resolution = self.comboRes.currentText()
 
-    def prevImage(self):
-        self.image_index -= 1
-        self.disableButtons()
-        self.idknu()
 
-    def change_wallpaper(self):
-        os.system("gsettings set org.gnome.desktop.background picture-uri file://%(path)s" % {'path':self.test1.get_image()})
-        os.system("gsettings set org.gnome.desktop.background picture-options wallpaper")
-    
-    # def get
+class Preview(QtWidgets.QFrame):
+    def __init__(self, parent, Wallpaper):
+        super(Preview, self).__init__()
+        self.setFrameShape(QtWidgets.QFrame.Panel)
 
-    # def checkUrl(self):
+        previewPM = QtGui.QPixmap("JdbvxK6.jpg")
+        previewPM = previewPM.scaled(384, 216)
+        lbl = QtWidgets.QLabel(self)
+        lbl.setPixmap(previewPM)
 
+        pLabel = QtWidgets.QVBoxLayout()
+        pLabel.addWidget(lbl)
+        pLabel.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(pLabel)
+
+
+class Navigation(QtWidgets.QFrame):
+    def __init__(self, parent, Wallpaper):
+        super(Navigation, self).__init__()
+        self.wallpaper = Wallpaper
+        
+        self.prevBtn = QtWidgets.QPushButton("<", self)
+        self.changeBtn = QtWidgets.QPushButton("O", self)
+        self.changeBtn.setToolTip("Change your wallpaper")
+        self.changeBtn.setFixedWidth(35)
+        self.nextBtn = QtWidgets.QPushButton(">", self)
+
+        nBox = QtWidgets.QHBoxLayout()
+        nBox.addWidget(self.prevBtn)
+        nBox.addWidget(self.changeBtn)
+        nBox.addWidget(self.nextBtn)
+
+        self.setLayout(nBox)
+        
 
 def main():
-    app = QApplication(sys.argv)
-    ex = GUI()
+    app = QtWidgets.QApplication(sys.argv)
+    ex = MainWindow(Wallpaper())
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
     main()
-# def main():
-
-# 	app = QApplication(sys.argv)
-
-# 	w = QWidget()
-# 	w.setFixedSize(320, 240)
-# 	w.setWindowTitle('Reddit Wallpaper')
-
-# 	@pyqtSlot()
-# 	def on_press():
-# 		RedditWallpaper.main("-db")
-
-# 	btn = QPushButton('Change background', w)
-# 	btn.setToolTip('Change background')
-# 	btn.clicked.connect(on_press)
-# 	btn.resize(btn.sizeHint())
-# 	btn.move(100, 80)
-
-# 	w.lbl = QLabel("Day", w)
-# 	combo = QComboBox(w)
-# 	combo.addItem("Day")
-# 	combo.addItem("Week")
-# 	combo.addItem("Month")
-# 	combo.addItem("Year")
-
-# 	combo.move(100, 100)
-# 	w.lbl.move(100, 100)
-
-# 	combo.activated[str].connect(onActivated(w.lbl, "kek"))
-
-
-# 	w.show()
-
-# 	exit(app.exec_())
-
-# def onActivated(lbl, text):
-# 	lbl.setText(text)
-# 	lbl.adjustSize()
-
-# if __name__ == '__main__':
-# 	main()
-
