@@ -31,15 +31,6 @@ class Parameters(QtWidgets.QFrame):
     def __init__(self, parent, Wallpaper):
         super(Parameters, self).__init__(parent=parent)
         self.Wallpaper = Wallpaper
-        #self.setFrameShape(QtWidgets.QFrame.Panel)
-
-        # pBox = QtWidgets.QHBoxLayout()
-
-        # pLabels = QtWidgets.QVBoxLayout()
-
-        # pLabels.addWidget(QtWidgets.QLabel("Subreddit", self))
-        # pLabels.addWidget(QtWidgets.QLabel("Submission", self))
-        # pLabels.addWidget(QtWidgets.QLabel("Resolution", self))
 
         self.subInput = QtWidgets.QLineEdit("Wallpaper", self)
         self.subInput.textChanged.connect(self.inputChange)
@@ -55,6 +46,7 @@ class Parameters(QtWidgets.QFrame):
         self.comboSub.currentIndexChanged.connect(self.submissionChange)
 
         self.comboRes = QtWidgets.QComboBox(self)
+        self.comboRes.addItem("Any")
         self.comboRes.addItem("1920x1080")
         self.comboRes.addItem("1366x768")
         self.comboRes.addItem("1280x1024")
@@ -65,6 +57,7 @@ class Parameters(QtWidgets.QFrame):
         self.previewBtn = QtWidgets.QPushButton("GO", self)
         self.previewBtn.setFixedWidth(35)
         self.previewBtn.setToolTip("Retrieve and preview the wallpapers") 
+        self.previewBtn.clicked.connect(self.showPreview)
         
         pSelection = QtWidgets.QHBoxLayout()
         pSelection.addWidget(self.subInput)
@@ -73,22 +66,20 @@ class Parameters(QtWidgets.QFrame):
         pSelection.addWidget(self.previewBtn)
         pSelection.setContentsMargins(2, 0, 2, 0)
 
-        # pBox.addLayout(pLabels)
-        #pBox.addLayout(pSelection)
-        #self.setLayout(pBox)
         self.setFixedHeight(40)
         self.setLayout(pSelection)
 
     def inputChange(self, subreddit):
         self.Wallpaper.subreddit = subreddit
 
-
     def submissionChange(self):
         self.Wallpaper.submission = self.comboSub.currentText()
 
-
     def resolutionChange(self):
         self.Wallpaper.resolution = self.comboRes.currentText()
+
+    def showPreview(self):
+        self.Wallpaper.getWallpapers()
 
 
 class Preview(QtWidgets.QFrame):
