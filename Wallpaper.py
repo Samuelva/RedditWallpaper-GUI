@@ -10,7 +10,8 @@ class Wallpaper(object):
         self.submission = "Week"
         self.resolution = "1920x1080"
         self.imageCount = 0
-        self.imageList = []
+        self.imageIndex = 0
+        self.imageList = ["JdbvxK6.jpg", "GlpViIh.jpg", "q7Zf6yM.jpg"]
         self.currentImage = ""
 
     def getWallpapers(self):
