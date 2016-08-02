@@ -1,7 +1,7 @@
 import os
 import praw
 import urllib.request
-# Iets
+
 class Wallpaper(object):
     def __init__(self):
         user_agent = "pythonRedditWallpaper:v4.0"
