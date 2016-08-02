@@ -9,13 +9,13 @@ from Wallpaper import Wallpaper
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, Wallpaper):
         super(MainWindow, self).__init__()
-        self.setUp(Wallpaper, "JdbvxK6.jpg")
+        self.setUp(Wallpaper)
         self.setWindowTitle("Reddit Wallpaper")
     
-    def setUp(self, Wallpaper, image):
+    def setUp(self, Wallpaper):
         self.Wallpaper = Wallpaper
         self.parameters = Parameters(self, self.Wallpaper)
-        self.preview = Preview(self, self.Wallpaper, image)
+        self.preview = Preview(self, self.Wallpaper)
         # self.navigation = Navigation(self, self.Wallpaper)
         self.mainLayout = QtWidgets.QVBoxLayout()
         self.mainLayout.addWidget(self.parameters)
@@ -72,29 +72,29 @@ class Parameters(QtWidgets.QFrame):
         self.setLayout(pSelection)
 
     def inputChange(self, subreddit):
-        print(subreddit)
         self.Wallpaper.subreddit = subreddit
 
     def submissionChange(self):
-        print(self.comboSub.currentText())
         self.Wallpaper.submission = self.comboSub.currentText()
 
     def resolutionChange(self):
-        print(self.comboRes.currentText())
         self.Wallpaper.resolution = self.comboRes.currentText()
 
     def showPreview(self):
+        self.Wallpaper.getSubmissions()
         self.Wallpaper.getWallpapers()
+        self.Wallpaper.download()
+        Preview.nextBtn.setEnabled(True)
 
 
 class Preview(QtWidgets.QWidget):
-    def __init__(self, parent, Wallpaper, image):
+    def __init__(self, parent, Wallpaper):
         super(Preview, self).__init__()
         self.wallpaper = Wallpaper
         # self.setFrameShape(QtWidgets.QFrame.Panel)
         # previewFrame = QtWidgets.QFrame()
         # previewFrame.setFrameShape(QtWidgets.QFrame.Panel)
-        self.previewPM = QtGui.QPixmap(image)
+        self.previewPM = QtGui.QPixmap(self.wallpaper.imageList[self.wallpaper.imageIndex])
         self.previewPM = self.previewPM.scaled(384, 216)
         self.lbl = QtWidgets.QLabel(self)
         self.lbl.setPixmap(self.previewPM)
@@ -137,6 +137,7 @@ class Preview(QtWidgets.QWidget):
 
     def prevButton(self):
         self.wallpaper.imageIndex -= 1
+        self.wallpaper.download()
         self.disableNavButton()
         test = QtGui.QPixmap(self.wallpaper.imageList[self.wallpaper.imageIndex])
         test = test.scaled(384, 216)
@@ -144,19 +145,19 @@ class Preview(QtWidgets.QWidget):
 
     def nextButton(self):
         self.wallpaper.imageIndex += 1
+        self.wallpaper.download()
         self.disableNavButton()
+        print(self.wallpaper.imageList)
         test = QtGui.QPixmap(self.wallpaper.imageList[self.wallpaper.imageIndex])
         test = test.scaled(384, 216)
         self.lbl.setPixmap(test)
 
     def changeButton(self):
-        print("/home/samuel/Documents/RedditWallpaper-GUI"+self.wallpaper.imageList[self.wallpaper.imageIndex])
         os.system("gsettings set org.gnome.desktop.background picture-uri file://%(path)s" % {'path':"/home/samuel/Documents/RedditWallpaper-GUI/"+self.wallpaper.imageList[self.wallpaper.imageIndex]})
         os.system("gsettings set org.gnome.desktop.background picture-options wallpaper")
 
     def disableNavButton(self):
         imageIndex = self.wallpaper.imageIndex
-        print(imageIndex)
 
         if imageIndex == 0:
             self.prevBtn.setEnabled(False)

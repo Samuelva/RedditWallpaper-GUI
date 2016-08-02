@@ -1,5 +1,6 @@
 import os
 import praw
+import urllib.request
 
 class Wallpaper(object):
     def __init__(self):
@@ -9,12 +10,14 @@ class Wallpaper(object):
         self.subreddit = "Wallpaper"
         self.submission = "Week"
         self.resolution = "1920x1080"
+        self.submissions = ""
         self.imageCount = 0
         self.imageIndex = 0
-        self.imageList = ["JdbvxK6.jpg", "GlpViIh.jpg", "q7Zf6yM.jpg"]
+        self.imageList = ["JdbvxK6.jpg"]
+        self.imageUrls = []
         self.currentImage = ""
 
-    def getWallpapers(self):
+    def getSubmissions(self):
         self.retrievedSubreddit = self.r.get_subreddit(self.subreddit)
 
         if self.submission == "Day":
@@ -28,8 +31,17 @@ class Wallpaper(object):
         elif self.submission == "All":
             self.submissions = self.retrievedSubreddit.get_top_from_all(limit=25)
 
+    def getWallpapers(self):
+        self.imageList = []
         for kek in self.submissions:
-            print(kek.url)
+            if kek.url.split(".")[-1] in ("jpg, png, JPG, PNG"):
+                self.imageUrls.append(kek.url)
+                self.imageList.append(kek.url.split("/")[-1])
         
+        print(self.imageList)
+        print(self.imageUrls)
+
+    def download(self):
+        urllib.request.urlretrieve(self.imageUrls[self.imageIndex], self.imageList[self.imageIndex])
 
         
