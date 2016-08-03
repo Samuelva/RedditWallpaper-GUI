@@ -96,8 +96,7 @@ class Preview(QtWidgets.QWidget):
         # previewFrame = QtWidgets.QFrame()
         # previewFrame.setFrameShape(QtWidgets.QFrame.Panel)
         self.lbl = QtWidgets.QLabel(self)
-        self.pixmap("/mnt/c/Users/Samuel/Dropbox/Projects/RedditWallpaper-GUI/JdbvxK6.jpg")
-        
+        self.pixmap("Default.jpg") 
 
         previewPMBox = QtWidgets.QVBoxLayout()
         previewPMBox.addWidget(self.lbl)
@@ -153,8 +152,8 @@ class Preview(QtWidgets.QWidget):
 
 
     def changeButton(self):
-        # os.system("gsettings set org.gnome.desktop.background picture-uri file://%(path)s" % {'path':"/home/samuel/Documents/RedditWallpaper-GUI/"+self.wallpaper.imageList[self.wallpaper.imageIndex]})
-        # os.system("gsettings set org.gnome.desktop.background picture-options wallpaper")
+        os.system("gsettings set org.gnome.desktop.background picture-uri file://%(path)s" % {'path':"/home/samuel/Documents/RedditWallpaper-GUI/"+self.wallpaper.imageList[self.wallpaper.imageIndex]})
+        os.system("gsettings set org.gnome.desktop.background picture-options wallpaper")
         print("Achtergrond verander")
 
     def disableNavButton(self):
