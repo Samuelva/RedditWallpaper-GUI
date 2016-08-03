@@ -152,7 +152,7 @@ class Preview(QtWidgets.QWidget):
 
 
     def changeButton(self):
-        os.system("gsettings set org.gnome.desktop.background picture-uri file://%(path)s" % {'path':"/home/samuel/Documents/RedditWallpaper-GUI/"+self.wallpaper.imageList[self.wallpaper.imageIndex]})
+        os.system("gsettings set org.gnome.desktop.background picture-uri file://%(path)s" % {'path':self.wallpaper.imageList[self.wallpaper.imageIndex]})
         os.system("gsettings set org.gnome.desktop.background picture-options wallpaper")
         print("Achtergrond verander")
 
