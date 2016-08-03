@@ -1,6 +1,8 @@
 import os
 import praw
 import urllib.request
+import requests
+import shutil
 
 class Wallpaper(object):
     def __init__(self):
@@ -34,14 +36,27 @@ class Wallpaper(object):
     def getWallpapers(self):
         self.imageList = []
         for kek in self.submissions:
-            if kek.url.split(".")[-1] in ("jpg, png, JPG, PNG"):
+            if kek.url.endswith(("jpg", "png", "JPG", "PNG")):
                 self.imageUrls.append(kek.url)
                 self.imageList.append(kek.url.split("/")[-1])
         
-        print(self.imageList)
-        print(self.imageUrls)
-
+        # print(self.imageList)
+        # print(self.imageUrls)
+    
     def download(self):
+        if "imgur.com" in self.imageUrls[self.imageIndex]:
+            self.downloadImgur()
+        elif "redd.it" in self.imageUrls[self.imageIndex]:
+            self.downloadReddit()
+            
+
+    def downloadImgur(self):
         urllib.request.urlretrieve(self.imageUrls[self.imageIndex], self.imageList[self.imageIndex])
 
-        
+    def downloadReddit(self):
+        # Evariste (stackoverflow)
+        r = requests.get(self.imageUrls[self.imageIndex], stream=True)
+        if r.status_code == 200:
+            with open(self.imageList[self.imageIndex], "wb") as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)      
