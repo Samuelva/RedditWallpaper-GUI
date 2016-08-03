@@ -15,7 +15,7 @@ class Wallpaper(object):
         self.submissions = ""
         self.imageCount = 0
         self.imageIndex = 0
-        self.imageList = ["JdbvxK6.jpg"]
+        self.imageList = ["Default.jpg"]
         self.imageUrls = []
         self.currentImage = ""
 
@@ -40,8 +40,6 @@ class Wallpaper(object):
                 self.imageUrls.append(kek.url)
                 self.imageList.append(kek.url.split("/")[-1])
         
-        # print(self.imageList)
-        # print(self.imageUrls)
     
     def download(self):
         if "imgur.com" in self.imageUrls[self.imageIndex]:
@@ -52,6 +50,7 @@ class Wallpaper(object):
 
     def downloadImgur(self):
         urllib.request.urlretrieve(self.imageUrls[self.imageIndex], self.imageList[self.imageIndex])
+
 
     def downloadReddit(self):
         # Evariste (stackoverflow)
