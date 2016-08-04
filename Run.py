@@ -90,6 +90,7 @@ class Parameters(QtWidgets.QFrame):
         print(self.wallpaper.imageUrls)
         self.parent.preview.pixmap(self.wallpaper.imageList[self.wallpaper.imageIndex])
         self.parent.preview.nextBtn.setEnabled(True)
+        self.parent.preview.prevBtn.setEnabled(False)
 
 class Preview(QtWidgets.QWidget):
     def __init__(self, parent, Wallpaper):

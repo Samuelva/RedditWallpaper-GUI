@@ -35,7 +35,9 @@ class Wallpaper(object):
             self.submissions = self.retrievedSubreddit.get_top_from_all(limit=25)
 
     def getWallpapers(self):
+        self.imageIndex = 0
         self.imageList = []
+        self.imageUrls = []
         for kek in self.submissions:
             if kek.url.endswith(("jpg", "png", "JPG", "PNG")):
                 self.imageUrls.append(kek.url)
