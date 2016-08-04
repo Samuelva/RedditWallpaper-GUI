@@ -34,7 +34,7 @@ class Parameters(QtWidgets.QFrame):
         self.parent = parent
         self.wallpaper = Wallpaper
 
-        self.subInput = QtWidgets.QLineEdit("Wallpaper", self)
+        self.subInput = QtWidgets.QLineEdit("Wallpapers", self)
         self.subInput.textChanged.connect(self.inputChange)
         self.subInput.setToolTip("Set the subreddit")
 
@@ -56,6 +56,7 @@ class Parameters(QtWidgets.QFrame):
         self.comboRes.setToolTip("Set the resolution")
         self.comboRes.currentIndexChanged.connect(self.resolutionChange)
 
+        self.pathBtn = QtWidgets.QPushButton("")
         self.previewBtn = QtWidgets.QPushButton("GO", self)
         self.previewBtn.setFixedWidth(35)
         self.previewBtn.setToolTip("Retrieve and preview the wallpapers") 
@@ -73,6 +74,7 @@ class Parameters(QtWidgets.QFrame):
 
     def inputChange(self, subreddit):
         self.wallpaper.subreddit = subreddit
+        print(self.wallpaper.subreddit)
 
     def submissionChange(self):
         self.wallpaper.submission = self.comboSub.currentText()
@@ -128,7 +130,7 @@ class Preview(QtWidgets.QWidget):
         self.setLayout(previewBox)
     
     def pixmap(self, image):
-        self.previewPM = QtGui.QPixmap(image)
+        self.previewPM = QtGui.QPixmap(image, "1")
         self.previewPM = self.previewPM.scaled(384, 216)
         self.lbl.setPixmap(self.previewPM)
         self.lbl.show()

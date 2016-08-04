@@ -9,7 +9,7 @@ class Wallpaper(object):
         user_agent = ("pythonRedditWallpaper:v4.0")
 
         self.r = praw.Reddit(user_agent=user_agent)
-        self.subreddit = "Wallpaper"
+        self.subreddit = "Wallpapers"
         self.submission = "Week"
         self.resolution = "1920x1080"
         self.submissions = ""
@@ -20,6 +20,7 @@ class Wallpaper(object):
         self.currentImage = ""
 
     def getSubmissions(self):
+        print(self.subreddit)
         self.retrievedSubreddit = self.r.get_subreddit(self.subreddit)
 
         if self.submission == "Day":
