@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
+import ctypes
 import os
+import subprocess
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Wallpaper import Wallpaper
@@ -150,11 +152,15 @@ class Preview(QtWidgets.QWidget):
         self.pixmap(self.wallpaper.imageList[self.wallpaper.imageIndex])
 
 
-
     def changeButton(self):
-        os.system("gsettings set org.gnome.desktop.background picture-uri file://%(path)s" % {'path':self.wallpaper.imageList[self.wallpaper.imageIndex]})
-        os.system("gsettings set org.gnome.desktop.background picture-options wallpaper")
-        print("Achtergrond verander")
+        if os.name == "posix":
+            os.system("gsettings set org.gnome.desktop.background picture-uri file://%(path)s" % {'path':self.wallpaper.imageList[self.wallpaper.imageIndex]})
+            os.system("gsettings set org.gnome.desktop.background picture-options wallpaper")
+        elif os.name == "nt":
+            path = "C:/Users/Samuel/Dropbox/Projects/RedditWallpaper-GUI/"
+            SPI_SETDESKWALLPAPER = 20
+            ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, path+self.wallpaper.imageList[self.wallpaper.imageIndex] , 0)
+
 
     def disableNavButton(self):
         imageIndex = self.wallpaper.imageIndex
