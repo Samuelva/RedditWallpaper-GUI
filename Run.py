@@ -53,7 +53,7 @@ class Parameters(QtWidgets.QFrame):
         self.comboRes.addItem("1366x768")
         self.comboRes.addItem("1280x1024")
         self.comboRes.addItem("800x600")
-        self.comboRes.setToolTip("Set the resolution")
+        self.comboRes.setToolTip("Set minimum resolution")
         self.comboRes.currentIndexChanged.connect(self.resolutionChange)
 
         pathIcon = QtGui.QPixmap("icon.png")
@@ -69,6 +69,11 @@ class Parameters(QtWidgets.QFrame):
         self.previewBtn.setFixedHeight(25)
         self.previewBtn.setToolTip("Retrieve and preview the wallpapers") 
         self.previewBtn.clicked.connect(self.showPreview)
+
+        self.testKnopje = QtWidgets.QPushButton("Kek", self)
+        self.testKnopje.setFixedWidth(35)
+        self.testKnopje.setFixedHeight(25)
+        self.testKnopje.clicked.connect(self.testje)
         
         pSelection = QtWidgets.QHBoxLayout()
         pSelection.addWidget(self.subInput)
@@ -76,10 +81,20 @@ class Parameters(QtWidgets.QFrame):
         pSelection.addWidget(self.comboRes)
         pSelection.addWidget(self.pathBtn)
         pSelection.addWidget(self.previewBtn)
+        pSelection.addWidget(self.testKnopje)
         pSelection.setContentsMargins(2, 0, 2, 0)
 
         self.setFixedHeight(40)
         self.setLayout(pSelection)
+
+    def testje(self):
+        print("\nImage list")
+        print(self.wallpaper.imageList)
+        print("\nImage urls")
+        print(self.wallpaper.imageUrls)
+        print("\nDownloaded")
+        print(self.wallpaper.downloaded)
+        print("\n")
 
     def inputChange(self, subreddit):
         self.wallpaper.subreddit = subreddit
@@ -91,7 +106,7 @@ class Parameters(QtWidgets.QFrame):
         self.wallpaper.resolution = self.comboRes.currentText()
 
     def inputPath(self):
-        path = QtWidgets.QFileDialog.getExistingDirectory(self, options=QtWidgets.QFileDialog.ShowDirsOnly)
+        self.wallpaper.savedit = QtWidgets.QFileDialog.getExistingDirectory(self, options=QtWidgets.QFileDialog.ShowDirsOnly)
 
     def showPreview(self):
         self.wallpaper.getSubmissions()

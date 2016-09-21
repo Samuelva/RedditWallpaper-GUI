@@ -18,6 +18,8 @@ class Wallpaper(object):
         self.imageList = ["Default.jpg"]
         self.imageUrls = []
         self.currentImage = ""
+        self.savedir = os.getcwd()
+        self.downloaded = []
 
     def getSubmissions(self):
         print(self.subreddit)
@@ -38,17 +40,23 @@ class Wallpaper(object):
         self.imageIndex = 0
         self.imageList = []
         self.imageUrls = []
+        self.downloaded = []
         for kek in self.submissions:
             if kek.url.endswith(("jpg", "png", "JPG", "PNG")):
                 self.imageUrls.append(kek.url)
                 self.imageList.append(kek.url.split("/")[-1])
+    
         
     
     def download(self):
-        if "imgur.com" in self.imageUrls[self.imageIndex]:
+        if self.imageList[self.imageIndex] in self.downloaded:
+            pass
+        elif "imgur.com" in self.imageUrls[self.imageIndex]:
             self.downloadImgur()
+            self.downloaded.append(self.imageList[self.imageIndex])
         elif "redd.it" in self.imageUrls[self.imageIndex]:
             self.downloadReddit()
+            self.downloaded.append(self.imageList[self.imageIndex])
             
 
     def downloadImgur(self):
