@@ -70,6 +70,6 @@ class Wallpaper(object):
     def delete(self):
         if len(self.downloaded) > 0:
             for image in self.downloaded:
-                if image in self.setWallpaper:
+                if image.split("/")[-1] in self.setWallpaper:
                     continue
                 os.remove(image)
