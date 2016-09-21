@@ -40,14 +40,12 @@ class Wallpaper(object):
         self.imageIndex = 0
         self.imageList = []
         self.imageUrls = []
-        self.downloaded = []
         for kek in self.submissions:
             if kek.url.endswith(("jpg", "png", "JPG", "PNG")):
                 self.imageUrls.append(kek.url)
                 self.imageList.append(kek.url.split("/")[-1])
     
         
-    
     def download(self):
         if self.imageList[self.imageIndex] in self.downloaded:
             pass
@@ -69,4 +67,10 @@ class Wallpaper(object):
         if r.status_code == 200:
             with open(self.imageList[self.imageIndex], "wb") as f:
                 r.raw.decode_content = True
-                shutil.copyfileobj(r.raw, f)      
+                shutil.copyfileobj(r.raw, f)
+
+    def delete(self):
+        print("wordt verwijderd!")
+        if len(self.downloaded) > 0:
+            for image in self.downloaded:
+                os.remove(self.savedir + "/" + image)

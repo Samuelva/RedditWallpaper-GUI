@@ -27,6 +27,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.show()
 
+    def closeEvent(self, event):
+        self.wallpaper.delete()
+        event.accept()
+
 
 class Parameters(QtWidgets.QFrame):
     def __init__(self, parent, Wallpaper):
@@ -88,13 +92,14 @@ class Parameters(QtWidgets.QFrame):
         self.setLayout(pSelection)
 
     def testje(self):
-        print("\nImage list")
-        print(self.wallpaper.imageList)
-        print("\nImage urls")
-        print(self.wallpaper.imageUrls)
-        print("\nDownloaded")
-        print(self.wallpaper.downloaded)
-        print("\n")
+        print(self.wallpaper.savedir)
+        # print("\nImage list")
+        # print(self.wallpaper.imageList)
+        # print("\nImage urls")
+        # print(self.wallpaper.imageUrls)
+        # print("\nDownloaded")
+        # print(self.wallpaper.downloaded)
+        # print("\n")
 
     def inputChange(self, subreddit):
         self.wallpaper.subreddit = subreddit
@@ -109,6 +114,7 @@ class Parameters(QtWidgets.QFrame):
         self.wallpaper.savedit = QtWidgets.QFileDialog.getExistingDirectory(self, options=QtWidgets.QFileDialog.ShowDirsOnly)
 
     def showPreview(self):
+        self.wallpaper.delete()
         self.wallpaper.getSubmissions()
         self.wallpaper.getWallpapers()
         self.wallpaper.download()
@@ -183,7 +189,7 @@ class Preview(QtWidgets.QWidget):
 
     def changeButton(self):
         if os.name == "posix":
-            os.system("gsettings set org.gnome.desktop.background picture-uri file://%(path)s" % {'path':self.wallpaper.imageList[self.wallpaper.imageIndex]})
+            os.system("gsettings set org.gnome.desktop.background picture-uri file://%(path)s" % {'path':self.wallpaper.savedir + "/" + self.wallpaper.imageList[self.wallpaper.imageIndex]})
             os.system("gsettings set org.gnome.desktop.background picture-options wallpaper")
         elif os.name == "nt":
             path = "C:/Users/Samuel/Dropbox/Projects/RedditWallpaper-GUI/"
