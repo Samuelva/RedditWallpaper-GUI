@@ -47,23 +47,23 @@ class Wallpaper(object):
                 self.imageList.append(kek.url.split("/")[-1])
     
     def download(self):
-        if self.imageList[self.imageIndex] in self.downloaded:
+        if self.savedir + "/" + self.imageList[self.imageIndex] in self.downloaded:
             pass
         elif "imgur.com" in self.imageUrls[self.imageIndex]:
             self.downloadImgur()
-            self.downloaded.append(self.imageList[self.imageIndex])
+            self.downloaded.append(self.savedir + "/" + self.imageList[self.imageIndex])
         elif "redd.it" in self.imageUrls[self.imageIndex]:
             self.downloadReddit()
-            self.downloaded.append(self.imageList[self.imageIndex])
+            self.downloaded.append(self.savedir + "/" + self.imageList[self.imageIndex])
 
     def downloadImgur(self):
-        urllib.request.urlretrieve(self.imageUrls[self.imageIndex], self.imageList[self.imageIndex])
+        urllib.request.urlretrieve(self.imageUrls[self.imageIndex], self.savedir + "/" + self.imageList[self.imageIndex])
 
     def downloadReddit(self):
         # Evariste (stackoverflow)
         r = requests.get(self.imageUrls[self.imageIndex], stream=True)
         if r.status_code == 200:
-            with open(self.imageList[self.imageIndex], "wb") as f:
+            with open(self.savedir + "/" + self.imageList[self.imageIndex], "wb") as f:
                 r.raw.decode_content = True
                 shutil.copyfileobj(r.raw, f)
 
@@ -72,4 +72,4 @@ class Wallpaper(object):
             for image in self.downloaded:
                 if image in self.setWallpaper:
                     continue
-                os.remove(self.savedir + "/" + image)
+                os.remove(image)

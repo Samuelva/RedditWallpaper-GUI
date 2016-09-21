@@ -109,7 +109,7 @@ class Parameters(QtWidgets.QFrame):
         self.wallpaper.resolution = self.comboRes.currentText()
 
     def inputPath(self):
-        self.wallpaper.savedit = QtWidgets.QFileDialog.getExistingDirectory(self, options=QtWidgets.QFileDialog.ShowDirsOnly)
+        self.wallpaper.savedir = QtWidgets.QFileDialog.getExistingDirectory(self, options=QtWidgets.QFileDialog.ShowDirsOnly)
 
     def showPreview(self):
         self.wallpaper.getSubmissions()
@@ -117,7 +117,7 @@ class Parameters(QtWidgets.QFrame):
         self.wallpaper.download()
         print(self.wallpaper.imageList)
         print(self.wallpaper.imageUrls)
-        self.parent.preview.pixmap(self.wallpaper.imageList[self.wallpaper.imageIndex])
+        self.parent.preview.pixmap(self.wallpaper.savedir + "/" + self.wallpaper.imageList[self.wallpaper.imageIndex])
         self.parent.preview.nextBtn.setEnabled(True)
         self.parent.preview.prevBtn.setEnabled(False)
 
@@ -169,7 +169,7 @@ class Preview(QtWidgets.QWidget):
         print("\n")
         print(self.wallpaper.imageList[self.wallpaper.imageIndex])
         print(self.wallpaper.imageUrls[self.wallpaper.imageIndex])
-        self.pixmap(self.wallpaper.imageList[self.wallpaper.imageIndex])
+        self.pixmap(self.wallpaper.savedir + "/" + self.wallpaper.imageList[self.wallpaper.imageIndex])
 
     def nextButton(self):
         self.wallpaper.imageIndex += 1
@@ -178,7 +178,7 @@ class Preview(QtWidgets.QWidget):
         print("\n")
         print(self.wallpaper.imageList[self.wallpaper.imageIndex])
         print(self.wallpaper.imageUrls[self.wallpaper.imageIndex])
-        self.pixmap(self.wallpaper.imageList[self.wallpaper.imageIndex])
+        self.pixmap(self.wallpaper.savedir + "/" + self.wallpaper.imageList[self.wallpaper.imageIndex])
 
     def changeButton(self):
         self.wallpaper.setWallpaper.append(self.wallpaper.imageList[self.wallpaper.imageIndex])
