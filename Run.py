@@ -56,9 +56,17 @@ class Parameters(QtWidgets.QFrame):
         self.comboRes.setToolTip("Set the resolution")
         self.comboRes.currentIndexChanged.connect(self.resolutionChange)
 
+        pathIcon = QtGui.QPixmap("icon.png")
         self.pathBtn = QtWidgets.QPushButton("")
+        self.pathBtn.setIcon(QtGui.QIcon(pathIcon))
+        self.pathBtn.setToolTip("Specificy location for the wallpapers")
+        self.pathBtn.setFixedWidth(35)
+        self.pathBtn.setFixedHeight(25)
+        self.pathBtn.clicked.connect(self.inputPath)
+
         self.previewBtn = QtWidgets.QPushButton("GO", self)
         self.previewBtn.setFixedWidth(35)
+        self.previewBtn.setFixedHeight(25)
         self.previewBtn.setToolTip("Retrieve and preview the wallpapers") 
         self.previewBtn.clicked.connect(self.showPreview)
         
@@ -66,6 +74,7 @@ class Parameters(QtWidgets.QFrame):
         pSelection.addWidget(self.subInput)
         pSelection.addWidget(self.comboSub)
         pSelection.addWidget(self.comboRes)
+        pSelection.addWidget(self.pathBtn)
         pSelection.addWidget(self.previewBtn)
         pSelection.setContentsMargins(2, 0, 2, 0)
 
@@ -74,14 +83,16 @@ class Parameters(QtWidgets.QFrame):
 
     def inputChange(self, subreddit):
         self.wallpaper.subreddit = subreddit
-        print(self.wallpaper.subreddit)
 
     def submissionChange(self):
         self.wallpaper.submission = self.comboSub.currentText()
 
     def resolutionChange(self):
         self.wallpaper.resolution = self.comboRes.currentText()
-    
+
+    def inputPath(self):
+        path = QtWidgets.QFileDialog.getExistingDirectory(self, options=QtWidgets.QFileDialog.ShowDirsOnly)
+
     def showPreview(self):
         self.wallpaper.getSubmissions()
         self.wallpaper.getWallpapers()
