@@ -14,11 +14,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.wallpaper = Wallpaper
         self.parameters = Parameters(self, self.wallpaper)
         self.preview = Preview(self, self.wallpaper)
-        # self.navigation = Navigation(self, self.Wallpaper)
+
         self.mainLayout = QtWidgets.QVBoxLayout()
         self.mainLayout.addWidget(self.parameters)
         self.mainLayout.addWidget(self.preview)
-        # self.mainLayout.addWidget(self.navigation)
 
         self.centralWidget = QtWidgets.QWidget()
         self.centralWidget.setLayout(self.mainLayout)
@@ -30,7 +29,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def closeEvent(self, event):
         self.wallpaper.delete()
         event.accept()
-
 
 class Parameters(QtWidgets.QFrame):
     def __init__(self, parent, Wallpaper):
@@ -114,7 +112,6 @@ class Parameters(QtWidgets.QFrame):
         self.wallpaper.savedit = QtWidgets.QFileDialog.getExistingDirectory(self, options=QtWidgets.QFileDialog.ShowDirsOnly)
 
     def showPreview(self):
-        self.wallpaper.delete()
         self.wallpaper.getSubmissions()
         self.wallpaper.getWallpapers()
         self.wallpaper.download()
@@ -129,9 +126,6 @@ class Preview(QtWidgets.QWidget):
         super(Preview, self).__init__()
         self.parent = parent
         self.wallpaper = Wallpaper
-        # self.setFrameShape(QtWidgets.QFrame.Panel)
-        # previewFrame = QtWidgets.QFrame()
-        # previewFrame.setFrameShape(QtWidgets.QFrame.Panel)
         self.lbl = QtWidgets.QLabel(self)
         self.pixmap("Default.jpg") 
 
@@ -186,17 +180,16 @@ class Preview(QtWidgets.QWidget):
         print(self.wallpaper.imageUrls[self.wallpaper.imageIndex])
         self.pixmap(self.wallpaper.imageList[self.wallpaper.imageIndex])
 
-
     def changeButton(self):
+        self.wallpaper.setWallpaper.append(self.wallpaper.imageList[self.wallpaper.imageIndex])
         if os.name == "posix":
             os.system("gsettings set org.gnome.desktop.background picture-uri file://%(path)s" % {'path':self.wallpaper.savedir + "/" + self.wallpaper.imageList[self.wallpaper.imageIndex]})
             os.system("gsettings set org.gnome.desktop.background picture-options wallpaper")
         elif os.name == "nt":
             path = "C:/Users/Samuel/Dropbox/Projects/RedditWallpaper-GUI/"
             SPI_SETDESKWALLPAPER = 20
-            ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, path+self.wallpaper.imageList[self.wallpaper.imageIndex] , 0)
-
-
+            ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, self.wallpaper.savedir + "/" + self.wallpaper.imageList[self.wallpaper.imageIndex] , 0)
+        
     def disableNavButton(self):
         imageIndex = self.wallpaper.imageIndex
 
@@ -208,38 +201,7 @@ class Preview(QtWidgets.QWidget):
         if imageIndex == len(self.wallpaper.imageList)-1:
             self.nextBtn.setEnabled(False)
         elif imageIndex < len(self.wallpaper.imageList)-1:
-            self.nextBtn.setEnabled(True)
-
-
-# class Navigation(QtWidgets.QFrame):
-#     def __init__(self, parent, Wallpaper):
-#         super(Navigation, self).__init__()
-#         self.wallpaper = Wallpaper
-        
-#         self.prevBtn = QtWidgets.QPushButton("<", self)
-#         self.changeBtn = QtWidgets.QPushButton("O", self)
-#         self.changeBtn.setToolTip("Change your wallpaper")
-#         self.changeBtn.setFixedWidth(35)
-#         self.nextBtn = QtWidgets.QPushButton(">", self)
-
-#         self.prevBtn.clicked.connect(self.prevButton)
-#         self.nextBtn.clicked.connect(self.nextButton)
-
-#         nBox = QtWidgets.QHBoxLayout()
-#         nBox.addWidget(self.prevBtn)
-#         nBox.addWidget(self.changeBtn)
-#         nBox.addWidget(self.nextBtn)
-
-#         self.setLayout(nBox)
-
-#     def prevButton(self):
-#         print("prev lel")
-
-#     def nextButton(self):
-#         print("next kek")
-#         self.Preview.lbl.setPixmap("q7Zf6yM.jpg")
-#         Preview.lbl.show()
-        
+            self.nextBtn.setEnabled(True)    
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

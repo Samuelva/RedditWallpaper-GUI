@@ -20,6 +20,7 @@ class Wallpaper(object):
         self.currentImage = ""
         self.savedir = os.getcwd()
         self.downloaded = []
+        self.setWallpaper = []
 
     def getSubmissions(self):
         print(self.subreddit)
@@ -45,7 +46,6 @@ class Wallpaper(object):
                 self.imageUrls.append(kek.url)
                 self.imageList.append(kek.url.split("/")[-1])
     
-        
     def download(self):
         if self.imageList[self.imageIndex] in self.downloaded:
             pass
@@ -55,11 +55,9 @@ class Wallpaper(object):
         elif "redd.it" in self.imageUrls[self.imageIndex]:
             self.downloadReddit()
             self.downloaded.append(self.imageList[self.imageIndex])
-            
 
     def downloadImgur(self):
         urllib.request.urlretrieve(self.imageUrls[self.imageIndex], self.imageList[self.imageIndex])
-
 
     def downloadReddit(self):
         # Evariste (stackoverflow)
@@ -70,7 +68,8 @@ class Wallpaper(object):
                 shutil.copyfileobj(r.raw, f)
 
     def delete(self):
-        print("wordt verwijderd!")
         if len(self.downloaded) > 0:
             for image in self.downloaded:
+                if image in self.setWallpaper:
+                    continue
                 os.remove(self.savedir + "/" + image)
