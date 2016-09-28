@@ -10,7 +10,7 @@ from Wallpaper import Wallpaper
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, Wallpaper):
         super(MainWindow, self).__init__()
-        self.setWindowIcon(QtGui.QIcon("Pictogram.png"))
+        self.setWindowIcon(QtGui.QIcon("Pictogram2.png"))
         self.wallpaper = Wallpaper
         self.parameters = Parameters(self, self.wallpaper)
         self.preview = Preview(self, self.wallpaper)
