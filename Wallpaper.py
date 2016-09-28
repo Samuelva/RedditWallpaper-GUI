@@ -49,14 +49,14 @@ class Wallpaper(object):
     def download(self):
         if self.savedir + "/" + self.imageList[self.imageIndex] in self.downloaded:
             pass
-        elif "imgur.com" in self.imageUrls[self.imageIndex]:
-            self.downloadImgur()
-            self.downloaded.append(self.savedir + "/" + self.imageList[self.imageIndex])
         elif "redd.it" in self.imageUrls[self.imageIndex]:
             self.downloadReddit()
             self.downloaded.append(self.savedir + "/" + self.imageList[self.imageIndex])
+        else:
+            self.downloadCommon()
+            self.downloaded.append(self.savedir + "/" + self.imageList[self.imageIndex])
 
-    def downloadImgur(self):
+    def downloadCommon(self):
         urllib.request.urlretrieve(self.imageUrls[self.imageIndex], self.savedir + "/" + self.imageList[self.imageIndex])
 
     def downloadReddit(self):
