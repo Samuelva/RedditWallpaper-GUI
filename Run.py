@@ -110,9 +110,12 @@ class Parameters(QtWidgets.QFrame):
 
     def inputPath(self):
         self.wallpaper.savedir = QtWidgets.QFileDialog.getExistingDirectory(self, options=QtWidgets.QFileDialog.ShowDirsOnly)
+        if self.wallpaper.savedir == "":
+            self.wallpaper.savedir = os.getcwd()
 
     def showPreview(self):
         self.wallpaper.getSubmissions()
+        print(self.wallpaper.imageUrls)
         self.wallpaper.getWallpapers()
         self.wallpaper.download()
         print(self.wallpaper.imageList)
