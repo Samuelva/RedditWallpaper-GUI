@@ -47,6 +47,7 @@ class Parameters(QtWidgets.QFrame):
         self.comboSub.addItem("Year")
         self.comboSub.addItem("All")
         self.comboSub.setToolTip("Set the type of submission")
+        self.comboSub.setFixedWidth(75)
         self.comboSub.currentIndexChanged.connect(self.submissionChange)
 
         self.comboRes = QtWidgets.QComboBox(self)
@@ -56,26 +57,23 @@ class Parameters(QtWidgets.QFrame):
         self.comboRes.addItem("1280x1024")
         self.comboRes.addItem("800x600")
         self.comboRes.setToolTip("Set minimum resolution")
+        self.comboRes.setFixedWidth(75)
         self.comboRes.currentIndexChanged.connect(self.resolutionChange)
 
-        pathIcon = QtGui.QPixmap("icon.png")
-        self.pathBtn = QtWidgets.QPushButton("")
-        self.pathBtn.setIcon(QtGui.QIcon(pathIcon))
+        self.pathBtn = QtWidgets.QPushButton("...")
         self.pathBtn.setToolTip("Specificy location for the wallpapers")
         self.pathBtn.setFixedWidth(35)
-        self.pathBtn.setFixedHeight(25)
         self.pathBtn.clicked.connect(self.inputPath)
 
         self.previewBtn = QtWidgets.QPushButton("GO", self)
         self.previewBtn.setFixedWidth(35)
-        self.previewBtn.setFixedHeight(25)
         self.previewBtn.setToolTip("Retrieve and preview the wallpapers") 
         self.previewBtn.clicked.connect(self.showPreview)
 
-        self.testKnopje = QtWidgets.QPushButton("Kek", self)
-        self.testKnopje.setFixedWidth(35)
-        self.testKnopje.setFixedHeight(25)
-        self.testKnopje.clicked.connect(self.testje)
+        # self.testKnopje = QtWidgets.QPushButton("Kek", self)
+        # self.testKnopje.setFixedWidth(35)
+        # self.testKnopje.setFixedHeight(25)
+        # self.testKnopje.clicked.connect(self.testje)
         
         pSelection = QtWidgets.QHBoxLayout()
         pSelection.addWidget(self.subInput)
@@ -83,14 +81,14 @@ class Parameters(QtWidgets.QFrame):
         pSelection.addWidget(self.comboRes)
         pSelection.addWidget(self.pathBtn)
         pSelection.addWidget(self.previewBtn)
-        pSelection.addWidget(self.testKnopje)
+        # pSelection.addWidget(self.testKnopje)
         pSelection.setContentsMargins(2, 0, 2, 0)
 
         self.setFixedHeight(40)
         self.setLayout(pSelection)
 
-    def testje(self):
-        print(self.wallpaper.savedir)
+    # def testje(self):
+    #     print(self.wallpaper.savedir)
         # print("\nImage list")
         # print(self.wallpaper.imageList)
         # print("\nImage urls")
@@ -115,11 +113,11 @@ class Parameters(QtWidgets.QFrame):
 
     def showPreview(self):
         self.wallpaper.getSubmissions()
-        print(self.wallpaper.imageUrls)
+        # print(self.wallpaper.imageUrls)
         self.wallpaper.getWallpapers()
         self.wallpaper.download()
-        print(self.wallpaper.imageList)
-        print(self.wallpaper.imageUrls)
+        # print(self.wallpaper.imageList)
+        # print(self.wallpaper.imageUrls)
         self.parent.preview.pixmap(self.wallpaper.savedir + "/" + self.wallpaper.imageList[self.wallpaper.imageIndex])
         self.parent.preview.nextBtn.setEnabled(True)
         self.parent.preview.prevBtn.setEnabled(False)
@@ -130,10 +128,14 @@ class Preview(QtWidgets.QWidget):
         self.parent = parent
         self.wallpaper = Wallpaper
         self.lbl = QtWidgets.QLabel(self)
+        self.loadingLbl = QtWidgets.QLabel(self)
         self.pixmap("Default.jpg") 
 
         previewPMBox = QtWidgets.QVBoxLayout()
+        previewPMBox.addStretch(1)
         previewPMBox.addWidget(self.lbl)
+        previewPMBox.addStretch(1)
+        # previewPMBox.addWidget(self.loadingLbl)
 
         self.prevBtn = QtWidgets.QPushButton("<", self)
         self.changeBtn = QtWidgets.QPushButton("O", self)
@@ -151,6 +153,11 @@ class Preview(QtWidgets.QWidget):
         navigationBox.addWidget(self.nextBtn)
         navigationBox.setContentsMargins(5, 2, 5, 0)
 
+        # self.testKnopje = QtWidgets.QPushButton("Kek", self)
+        # self.testKnopje.setFixedWidth(35)
+        # self.testKnopje.setFixedHeight(25)
+        # self.testKnopje.clicked.connect(self.testje)
+
         self.disableNavButton()
 
         previewBox = QtWidgets.QVBoxLayout()
@@ -159,28 +166,48 @@ class Preview(QtWidgets.QWidget):
         previewBox.setContentsMargins(2, 0, 2, 0)
         self.setLayout(previewBox)
     
+    def testje(self):
+        self.loading()
+
     def pixmap(self, image):
         self.previewPM = QtGui.QPixmap(image, "1")
-        self.previewPM = self.previewPM.scaled(384, 216)
+        self.previewPM = self.previewPM.scaled(500, 300, QtCore.Qt.KeepAspectRatio)
         self.lbl.setPixmap(self.previewPM)
+        self.lbl.setAlignment(QtCore.Qt.AlignCenter)
         self.lbl.show()
+
+    def loading(self):
+        effect = QtWidgets.QGraphicsColorizeEffect()
+        effect.setColor(QtGui.QColor(0, 0, 0))
+        effect.setStrength(0.8)
+        # self.lbl.setGraphicsEffect(effect)        
+        # self.loadingGif = QtGui.QMovie("squares.gif", QtCore.QByteArray())
+        # self.loadingGif.scaledSize()
+        # self.loadingGif.setCacheMode(QtGui.QMovie.CacheAll)
+        # self.loadingGif.setSpeed(100)
+        # self.loadingGif.start()
+
+        # self.loadingLbl.setMovie(self.loadingGif)
+        # self.loadingLbl.move(100, 100)
+        # self.loadingLbl.show()
+
 
     def prevButton(self):
         self.wallpaper.imageIndex -= 1
         self.wallpaper.download()
         self.disableNavButton()
-        print("\n")
-        print(self.wallpaper.imageList[self.wallpaper.imageIndex])
-        print(self.wallpaper.imageUrls[self.wallpaper.imageIndex])
+        # print("\n")
+        # print(self.wallpaper.imageList[self.wallpaper.imageIndex])
+        # print(self.wallpaper.imageUrls[self.wallpaper.imageIndex])
         self.pixmap(self.wallpaper.savedir + "/" + self.wallpaper.imageList[self.wallpaper.imageIndex])
 
     def nextButton(self):
         self.wallpaper.imageIndex += 1
         self.wallpaper.download()
         self.disableNavButton()
-        print("\n")
-        print(self.wallpaper.imageList[self.wallpaper.imageIndex])
-        print(self.wallpaper.imageUrls[self.wallpaper.imageIndex])
+        # print("\n")
+        # print(self.wallpaper.imageList[self.wallpaper.imageIndex])
+        # print(self.wallpaper.imageUrls[self.wallpaper.imageIndex])
         self.pixmap(self.wallpaper.savedir + "/" + self.wallpaper.imageList[self.wallpaper.imageIndex])
 
     def changeButton(self):
